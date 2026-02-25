@@ -117,6 +117,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartOverlay = document.querySelector('.cart-overlay');
     const cartDrawer = document.querySelector('.cart-drawer');
     const cartCtaClose = document.querySelector('.cart-cta-close');
+    const addToCartBtns = document.querySelectorAll('.add-to-cart-btn');
+    const cartBadge = document.querySelector('.cart-badge');
+    const cartBody = document.querySelector('.cart-body');
+    const cartTotalElement = document.querySelector('.cart-total span:last-child');
+    const checkoutBtn = document.querySelector('.btn-checkout');
+
+    let cart = [];
 
     const openCart = () => {
         cartDrawer.classList.add('open');
@@ -130,13 +137,92 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
     };
 
-    if (cartToggleBtn && cartCloseBtn && cartOverlay && cartDrawer) {
-        cartToggleBtn.addEventListener('click', openCart);
-        cartCloseBtn.addEventListener('click', closeCart);
-        cartOverlay.addEventListener('click', closeCart);
+    const updateCartUI = () => {
+        // Update Badge
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartBadge.textContent = totalItems;
 
-        if (cartCtaClose) {
-            cartCtaClose.addEventListener('click', closeCart);
+        // Update Total
+        const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        cartTotalElement.textContent = `${totalPrice.toFixed(2)} €`;
+
+        // Update Checkout Btn
+        checkoutBtn.disabled = cart.length === 0;
+
+        // Render Items
+        if (cart.length === 0) {
+            cartBody.innerHTML = `
+                <div class="cart-empty-state">
+                    <p>Aún no has elegido tu péndulo.</p>
+                    <a href="#catalogo" class="btn btn-primary cart-cta-close" onclick="document.querySelector('.cart-close-btn').click()">Ver Catálogo</a>
+                </div>
+            `;
+            return;
         }
-    }
+
+        let itemsHTML = '';
+        cart.forEach(item => {
+            itemsHTML += `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <h4>${item.name}</h4>
+                        <p>${item.price.toFixed(2)} €</p>
+                    </div>
+                    <div class="cart-item-controls">
+                        <button class="cart-qty-btn minus" data-id="${item.id}">-</button>
+                        <span class="cart-qty">${item.quantity}</span>
+                        <button class="cart-qty-btn plus" data-id="${item.id}">+</button>
+                    </div>
+                </div>
+            `;
+        });
+        cartBody.innerHTML = itemsHTML;
+
+        // Attach event listeners to new buttons
+        document.querySelectorAll('.cart-qty-btn.minus').forEach(btn => {
+            btn.addEventListener('click', (e) => updateQuantity(e.target.dataset.id, -1));
+        });
+        document.querySelectorAll('.cart-qty-btn.plus').forEach(btn => {
+            btn.addEventListener('click', (e) => updateQuantity(e.target.dataset.id, 1));
+        });
+    };
+
+    const addToCart = (product) => {
+        const existingItem = cart.find(item => item.id === product.id);
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({ ...product, quantity: 1 });
+        }
+        updateCartUI();
+        openCart();
+    };
+
+    const updateQuantity = (productId, change) => {
+        const item = cart.find(item => item.id === productId);
+        if (!item) return;
+
+        item.quantity += change;
+        if (item.quantity <= 0) {
+            cart = cart.filter(i => i.id !== productId);
+        }
+        updateCartUI();
+    };
+
+    // Event Listeners
+    if (cartToggleBtn) cartToggleBtn.addEventListener('click', openCart);
+    if (cartCloseBtn) cartCloseBtn.addEventListener('click', closeCart);
+    if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
+    if (cartCtaClose) cartCtaClose.addEventListener('click', closeCart);
+
+    addToCartBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const product = {
+                id: e.target.dataset.id,
+                name: e.target.dataset.name,
+                price: parseFloat(e.target.dataset.price)
+            };
+            addToCart(product);
+        });
+    });
 });
