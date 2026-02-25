@@ -1775,14 +1775,24 @@ section {
 }
 
 @media (max-width: 992px) {
-    .mobile-menu-toggle {
+    .navbar {
         display: flex;
-        align-self: flex-start;
-        margin-top: var(--space-1);
+        justify-content: flex-start;
+        align-items: center;
     }
 
-    .navbar {
-        align-items: flex-start;
+    .mobile-menu-toggle {
+        display: flex;
+        order: -1;
+        margin-right: auto;
+        margin-top: 0;
+    }
+
+    .nav-brand {
+        margin: 0 auto;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
     }
 
     .nav-links-centered,
@@ -1867,6 +1877,23 @@ section {
 
     .ethereal-title {
         font-size: 2.5rem;
+    }
+
+    /* Concept & Layout Fixes */
+    .paper-card {
+        grid-template-columns: 1fr;
+        padding: var(--space-6) var(--space-8);
+        gap: var(--space-4);
+    }
+
+    .paper-card h3 {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .paper-card p {
+        font-size: 1rem;
+        text-align: center;
     }
 
     /* Grids stacking */
