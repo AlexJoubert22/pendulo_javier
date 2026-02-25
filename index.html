@@ -38,6 +38,14 @@
             <a href="#autoridad">Javier Botía</a>
         </div>
         <div class="nav-cta">
+            <button class="cart-toggle-btn" aria-label="Abrir carrito">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 20a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                    <path d="M20 20a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                </svg>
+                <span class="cart-badge">0</span>
+            </button>
             <a href="#catalogo" class="btn btn-primary btn-small">Elegir mi péndulo</a>
             <a href="https://javierbotia.com/productos/" target="_blank" class="btn btn-outline btn-small">Más
                 productos</a>
@@ -50,6 +58,29 @@
             <span></span>
         </button>
     </nav>
+
+    <!-- Shopping Cart Sidebar -->
+    <div class="cart-overlay"></div>
+    <div class="cart-drawer">
+        <div class="cart-header">
+            <h3>Tu Cesta</h3>
+            <button class="cart-close-btn">&times;</button>
+        </div>
+        <div class="cart-body">
+            <div class="cart-empty-state">
+                <p>Aún no has elegido tu péndulo.</p>
+                <a href="#catalogo" class="btn btn-primary cart-cta-close">Ver Catálogo</a>
+            </div>
+            <!-- Cart items will be dynamically injected here in the future -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total</span>
+                <span>0.00 €</span>
+            </div>
+            <button class="btn btn-primary btn-checkout" disabled>Finalizar Compra</button>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <header id="hero" class="hero">

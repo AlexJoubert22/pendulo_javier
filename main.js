@@ -110,4 +110,33 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // --- Shopping Cart Logic ---
+    const cartToggleBtn = document.querySelector('.cart-toggle-btn');
+    const cartCloseBtn = document.querySelector('.cart-close-btn');
+    const cartOverlay = document.querySelector('.cart-overlay');
+    const cartDrawer = document.querySelector('.cart-drawer');
+    const cartCtaClose = document.querySelector('.cart-cta-close');
+
+    const openCart = () => {
+        cartDrawer.classList.add('open');
+        cartOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    };
+
+    const closeCart = () => {
+        cartDrawer.classList.remove('open');
+        cartOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    };
+
+    if (cartToggleBtn && cartCloseBtn && cartOverlay && cartDrawer) {
+        cartToggleBtn.addEventListener('click', openCart);
+        cartCloseBtn.addEventListener('click', closeCart);
+        cartOverlay.addEventListener('click', closeCart);
+
+        if (cartCtaClose) {
+            cartCtaClose.addEventListener('click', closeCart);
+        }
+    }
 });
